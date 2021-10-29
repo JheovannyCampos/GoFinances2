@@ -1,4 +1,7 @@
 import React from "react";
+import { StyleSheet } from 'react-native'
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import { LinearGradient } from 'expo-linear-gradient';
 import { categories } from "../../utils/categories";
 import { 
     Container,
@@ -17,60 +20,113 @@ export interface TransactionCardProps{
     amount: string;
     category: string;
     date: string;
+    
 }
 
 interface Props{
     data: TransactionCardProps;
     onPress: () => void;
+    loading: boolean;
 }
 
-export function TransactionCard({ data, onPress }:Props) {
+export function TransactionCard({ data, onPress, loading }:Props) {
     const category = categories.filter(
         item => item.key === data.category
     )[0];
+
+
     return(
         <Container
             onPress={onPress}
         >
-
-            <Title>{data.name}</Title>
-            
-            <Amount type={data.type}>
-                { data.type === 'negative' && '- '}
-                { data.amount }
-            </Amount>
+            { 
+                !loading ? <ShimmerPlaceHolder
+                    style={styles.shimmerTitle}
+                    visible={loading}
+                    LinearGradient = { LinearGradient }
+            >
+                <Title>{data.name}</Title>
+            </ShimmerPlaceHolder> : 
+                <Title>{data.name}</Title>
+            }
+            { 
+                !loading ? <ShimmerPlaceHolder
+                    style={styles.shimmerAmount}
+                    visible={loading}
+                    LinearGradient = { LinearGradient }
+            >
+                <Amount type={data.type}>
+                    { data.type === 'negative' && '- '}
+                    { data.amount }
+                </Amount>
+            </ShimmerPlaceHolder> : 
+                <Amount type={data.type}>
+                    { data.type === 'negative' && '- '}
+                    { data.amount }
+                </Amount>
+            }
 
             <Footer>
                 <Category >
-                    <Icon name={category.icon}/>
-                    <CategoryName>{category.name}</CategoryName>
+                { 
+                    !loading ? <ShimmerPlaceHolder
+                        style={styles.shimmerIcon}
+                        visible={loading}
+                        LinearGradient = { LinearGradient }
+                    >
+                        <Icon name={category.icon}/>
+                    </ShimmerPlaceHolder> : 
+                        <Icon name={category.icon}/>
+                 }
+                 { 
+                    !loading ? <ShimmerPlaceHolder
+                        style={styles.shimmerCategory}
+                        visible={loading}
+                        LinearGradient = { LinearGradient }
+                    >
+                        <CategoryName>{category.name}</CategoryName>
+                    </ShimmerPlaceHolder> : 
+                        <CategoryName>{category.name}</CategoryName>
+                 }   
                 </Category>
+                { 
+                    !loading ? <ShimmerPlaceHolder
+                        style={styles.shimmerDate}
+                        visible={loading}
+                        LinearGradient = { LinearGradient }
+                    >
+                        <Date>{data.date}</Date>
+                    </ShimmerPlaceHolder> : 
+                        <Date>{data.date}</Date>
+                 }
                 
-                <Date>{data.date}</Date>
             </Footer>
         </Container>        
     )
 }
 
-//    const TransactionCard: React.FC<Props> = (props) => {
-//        const {data} = props
-
-//     return (
-//         <Container>
-//             <Title>{data.title}</Title>
-            
-//             <Amount>{data.amount}</Amount>
-
-//             <Footer>
-//                 <Category >
-//                     <Icon name={data.category?.icon}/>
-//                     <CategoryName>{data.category?.name}</CategoryName>
-//                 </Category>
-                
-//                 <Date>{data.date}</Date>
-//             </Footer>
-//         </Container>
-//     )
-// }
-
-// export default TransactionCard;
+const styles = StyleSheet.create({
+    shimmerTitle: {
+        height: 14,
+        width: 150,
+    },
+    shimmerAmount: {
+        height: 20,
+        width: 190,
+        marginTop: 30,
+    },
+    shimmerIcon: {
+        height: 20,
+        width: 20,
+        marginTop: 5,
+    },
+    shimmerCategory: {
+        height: 14,
+        width: 130,
+        marginLeft: 15,
+    },
+    shimmerDate: {
+        height: 14,
+        width: 50,
+    },
+})   

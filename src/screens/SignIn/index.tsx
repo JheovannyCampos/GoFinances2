@@ -9,43 +9,59 @@ import {
     FooteWrapper,
 } from './styles';
 
-import AppleSvg from '../../assets/apple.svg';
-import GoogleSvg from '../../assets/google.svg';
+// import AppleSvg from '../../assets/apple.svg';
+// import GoogleSvg from '../../assets/google.svg';
 import LogoSvg from '../../assets/logo.svg';
 
-import { useAuth } from '../../hooks/auth'; 
+// import { useAuth } from '../../hooks/auth'; 
 
 import { RFValue } from 'react-native-responsive-fontsize';
-import { SignInSocialButton } from '../../components/SignInSocialButton';
-import { ActivityIndicator, Alert, Platform } from 'react-native';
+// import { SignInSocialButton } from '../../components/SignInSocialButton';
+// import { ActivityIndicator, Alert, Platform } from 'react-native';
 import { useTheme } from 'styled-components';
+import { LoadAnimation } from '../../components/LoadAnimation';
+import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export function SignIn(){
     const [isLoading, setIsLoading] = useState(false);
-    const { signInWithGoogle, signInWithApple } = useAuth()
+    // const { signInWithGoogle, signInWithApple } = useAuth()
 
     const theme = useTheme();
+    const navigation: any = useNavigation();
 
-    async function handleSignInWithGoogle(){
+    // async function handleSignInWithGoogle(){
+    //     try {
+    //         setIsLoading(true);
+    //         return await signInWithGoogle();
+    //     } catch (error) {
+    //         console.log(error);
+    //         Alert.alert("Não foi possível conectar a uma conta Google");
+    //         setIsLoading(false);
+    //     }
+    // }
+    // async function handleSignInWithApple(){
+    //     try {
+    //         setIsLoading(true);
+    //         return await signInWithApple();
+    //     } catch (error) {
+    //         console.log(error);
+    //         Alert.alert("Não foi possível conectar a uma conta Apple");
+    //         setIsLoading(false);
+    //     }
+    // }
+
+        async function appLoaded(){
         try {
             setIsLoading(true);
-            return await signInWithGoogle();
+            navigation.navigate('Listagem')
         } catch (error) {
             console.log(error);
             Alert.alert("Não foi possível conectar a uma conta Google");
             setIsLoading(false);
         }
     }
-    async function handleSignInWithApple(){
-        try {
-            setIsLoading(true);
-            return await signInWithApple();
-        } catch (error) {
-            console.log(error);
-            Alert.alert("Não foi possível conectar a uma conta Apple");
-            setIsLoading(false);
-        }
-    }
+    
 
     return(
         <Container>
@@ -62,28 +78,28 @@ export function SignIn(){
                     </Title>
                 </TitleWrapper>
 
-                <SignInTitle>
+                {/* <SignInTitle>
                     Faça o seu login com {'\n'}
                     uma das contas abaixo {'\n'}
-                </SignInTitle>
+                </SignInTitle> */}
             </Header>
             <Footer>
                 <FooteWrapper>
-                    <SignInSocialButton
+                    {/* <SignInSocialButton
                         title="Entrar com Google"
                         svg={GoogleSvg}
                         onPress={handleSignInWithGoogle}
                     />
                     {
-                        Platform.OS === 'ios' &&
-                        <SignInSocialButton 
-                            title="Entrar com Apple"
-                            svg={AppleSvg}  
-                            onPress={handleSignInWithApple}                     
-                        />
-                    }
+                        // Platform.OS === 'ios' &&
+                        // <SignInSocialButton 
+                        //     title="Entrar com Apple"
+                        //     svg={AppleSvg}  
+                        //     onPress={handleSignInWithApple}                     
+                        // />
+                    } */}
                 </FooteWrapper>
-                { isLoading && <ActivityIndicator color={theme.colors.shape} /> }
+                { !isLoading && (() => {appLoaded})}
             </Footer>
         </Container>
     )

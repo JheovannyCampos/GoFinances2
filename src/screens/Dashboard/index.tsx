@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { ActivityIndicator, Alert, ScrollView } from "react-native";
+import { ActivityIndicator, Alert, ScrollView,Text,View,StyleSheet } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from "@react-navigation/core";
 
 import { useTheme } from "styled-components";
@@ -171,21 +173,18 @@ export function Dashboard(){
         loadTransactions();
     },[]));
 
+    setTimeout(() => {
+        setIsLoading(true);
+    }, 1500)
+
     return(
         <Container>
-            {
-                isLoading ? 
-                <LoadContainer>
-                    <ActivityIndicator 
-                        color={theme.colors.primary}
-                        size= "large"
-                    /> 
-                </LoadContainer> :
+            
             <>
                 <Header>
                     <UserWrapper>    
                         <UserInfo>
-                            <Photo source={{uri : user.photo}}
+                            <Photo source={{uri : "https://avatars.githubusercontent.com/u/53500639?v=4"}}
                             />
                             <User>
                                 <UserGreeting>Olá </UserGreeting>
@@ -200,23 +199,28 @@ export function Dashboard(){
                     </UserWrapper> 
                 </Header>
                 <HighlightCards>
-                <HighlightCard 
-                        title="Total" 
-                        amount={highlightData?.total?.amount}
-                        lastTransaction={highlightData?.total?.lastTransaction} 
-                        type="total"
+
+                    <HighlightCard 
+                            title="Total" 
+                            amount={highlightData?.total?.amount}
+                            lastTransaction={highlightData?.total?.lastTransaction} 
+                            type="total"
+                            loading={isLoading}
                     />
+     
                     <HighlightCard 
                         title="Entradas" 
                         amount={highlightData?.entries?.amount}
                         lastTransaction={highlightData?.entries?.lastTransaction} 
                         type="up"
+                        loading={isLoading}
                     /> 
                     <HighlightCard 
                         title="Saídas" 
                         amount={highlightData?.expensives?.amount}
                         lastTransaction={highlightData?.expensives?.lastTransaction}
                         type="down"
+                        loading={isLoading}
                     />  
                 </HighlightCards>
             
@@ -226,12 +230,11 @@ export function Dashboard(){
                     <TransactionList
                         data={transactions}
                         keyExtractor={item => item.id}
-                        renderItem={({item}) => <TransactionCard onPress={()=> alerta(item.name, item.id)} data={item} />}
+                        renderItem={({item}) => <TransactionCard onPress={()=> alerta(item.name, item.id)} data={item} loading={isLoading}/>}
                         showsVerticalScrollIndicator={false}
                     />
                 </Transactions>
             </>
-            }
         </Container>
     )
 }
