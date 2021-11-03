@@ -10,6 +10,11 @@
    "android": {
      "package": "com.jcs.gofinances",
      "versionCode": 1
+   },
+   "splash": {
+    "image": "/src/assets/logo.png",
+    "width": 80,
+    "height": 50
    }
   }
 }
